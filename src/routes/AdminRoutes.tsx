@@ -17,11 +17,11 @@ import Post from "@/pages/Admin/Post/Index";
 import PostCreate from "@/pages/Admin/Post/Create";
 import PostEdit from "@/pages/Admin/Post/Edit";
 
-const routerAdmin = createBrowserRouter([
+const AdminRoutes = createBrowserRouter([
   {
     path: "admin",
     element: <AdminLayoutAuth />,
-    loader: restrictedLoader,
+    // loader: restrictedLoader,
     children: [
       { path: "login", element: <Login /> },
       { path: "register", element: <Login /> },
@@ -30,7 +30,7 @@ const routerAdmin = createBrowserRouter([
   {
     path: "admin",
     element: <AdminLayout />,
-    loader: protectedLoader,
+    // loader: protectedLoader,
     children: [
       { index: true, element: <Home /> },
       {
@@ -61,4 +61,4 @@ const routerAdmin = createBrowserRouter([
   },
 ]);
 
-export default routerAdmin;
+export default AdminRoutes;

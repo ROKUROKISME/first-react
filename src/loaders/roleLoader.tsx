@@ -4,7 +4,6 @@ import { getUserRole } from "@/utils/getToken";
 
 export function restrictedLoader() {
   if (isAuthenticated()) {
-
     const role = getUserRole();
     if (role == "SuperAdmin") return redirect("/admin");
     if (role == "Admin") return redirect("/admin");

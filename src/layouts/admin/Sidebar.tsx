@@ -1,5 +1,6 @@
 import LogoReact from "@/assets/react.svg"
 import { NavLink, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const masterDatas = [
   // {
@@ -44,7 +45,7 @@ const Sidebar = () => {
       id="layout-menu"
       className="layout-menu menu-vertical menu bg-menu-theme">
       <div className="app-brand demo">
-        <a href="index.html" className="app-brand-link">
+        <Link to="/admin" className="app-brand-link">
           <span className="p-1 app-brand-logo demo">
             <img
               src={LogoReact}
@@ -55,7 +56,7 @@ const Sidebar = () => {
           <span className="app-brand-text demo menu-text fw-bolder ms-2">
             Sneat
           </span>
-        </a>
+        </Link>
         <a
           href="javascript:void(0);"
           className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
