@@ -5,6 +5,7 @@ export interface User {
   jk: string;
   telp: string;
   email: string;
+  role: string;
 }
 
 export interface UserFormData {
@@ -14,4 +15,5 @@ export interface UserFormData {
   telp: string;
   email: string;
   password?: string;
+  role: string;
 }

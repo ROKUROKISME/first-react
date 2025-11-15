@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
 import RefreshButton from "@/layouts/admin/components/buttons/RefreshButton";
 import IsLoading from "@/layouts/admin/components/loadings/Loading";
 import { NavLink, Link } from "react-router-dom";
@@ -15,6 +16,7 @@ import Swal from "sweetalert2";
 
 function Posts() {
   const addAlert = useAlertStore((state) => state.addAlert);
+  const token = Cookies.get('token');
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [filtered, setFiltered] = useState<Post[]>([]);
@@ -49,7 +51,13 @@ function Posts() {
         // 2. Gunakan URL yang benar untuk daftar pengguna (tanpa ID di belakang)
         const response = await axios.get<ApiResponse<Post[]>>(
           "http://localhost:8000/api/post",
-          { signal: controller.signal }
+          {
+            signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${token}`, // Add this line to include the JWT
+            },
+            withCredentials: true,
+          }
         );
 
         // 3. Set state dengan array data yang benar
@@ -64,7 +72,7 @@ function Posts() {
     };
     // 4. Panggil fungsi fetchPosts
     fetchPosts();
-  }, []);
+  }, [token]);
 
   // Filtered Data Posts
   useEffect(() => {
