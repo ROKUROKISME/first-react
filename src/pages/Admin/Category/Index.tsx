@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
 import RefreshButton from "@/layouts/admin/components/buttons/RefreshButton";
 import IsLoading from "@/layouts/admin/components/loadings/Loading";
 import { Link, NavLink } from "react-router-dom";
@@ -14,6 +15,7 @@ import Swal from "sweetalert2";
 
 function Category() {
   const addAlert = useAlertStore((state) => state.addAlert);
+  const token = Cookies.get("token");
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +32,12 @@ function Category() {
         // 2. Gunakan URL yang benar untuk daftar pengguna (tanpa ID di belakang)
         const response = await axios.get<ApiResponse<Category[]>>(
           "http://localhost:8000/api/category",
-          { signal: controller.signal }
+          { signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${token}`, // Add this line to include the JWT
+            },
+            withCredentials: true,
+           }
         );
 
         // 3. Set state dengan array data yang benar
@@ -44,7 +51,7 @@ function Category() {
     };
     // 4. Panggil fungsi fetchUsers
     fetchUsers();
-  }, []);
+  }, [token]);
 
   const handleDelete = async (itemId: number) => {
     Swal.fire({

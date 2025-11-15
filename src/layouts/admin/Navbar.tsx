@@ -1,3 +1,51 @@
+import Cookies from "js-cookie";
+import axios from "axios";
+import Swal from "sweetalert2";
+// Import komponen UI yang Anda sediakan:
+
+import { useAlertStore } from "@/store/alertStore";
+
+const Logout = () => {
+  const token = Cookies.get("token");
+  const addAlert = useAlertStore.getState().addAlert;
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Cookies.remove("token");
+      try {
+        await axios.delete("http://localhost:8000/api/admin/logout", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        addAlert("Anda berhasil Logout!", "success");
+        window.location.href = "/admin/login";
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.status === 422) {
+          addAlert(error.response.data.errors, "danger");
+          return;
+        }
+      }
+    }
+  });
+};
+
 const Navbar = () => {
   return (
     <nav
@@ -101,10 +149,10 @@ const Navbar = () => {
                 <div className="dropdown-divider" />
               </li>
               <li>
-                <a className="dropdown-item" href="auth-login-basic.html">
+                <button onClick={Logout} className="dropdown-item">
                   <i className="bx bx-power-off me-2" />
                   <span className="align-middle">Log Out</span>
-                </a>
+                </button>
               </li>
             </ul>
           </li>

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { protectedLoader } from "@/loaders/protectedLoader";
+import { restrictedLoader } from "@/loaders/restrictedLoader";
 
 // Pages
 import AdminLayout from "@/layouts/admin/AdminLayout";
@@ -20,6 +21,7 @@ const routerAdmin = createBrowserRouter([
   {
     path: "admin",
     element: <AdminLayoutAuth />,
+    loader: restrictedLoader,
     children: [
       { path: "login", element: <Login /> },
       { path: "register", element: <Login /> },

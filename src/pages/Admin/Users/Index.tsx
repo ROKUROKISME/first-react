@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
 import RefreshButton from "@/layouts/admin/components/buttons/RefreshButton";
 import IsLoading from "@/layouts/admin/components/loadings/Loading";
 import { NavLink, Link } from "react-router-dom";
@@ -14,6 +15,7 @@ import Swal from "sweetalert2";
 
 function Users() {
   const addAlert = useAlertStore((state) => state.addAlert);
+  const token = Cookies.get("token");
   
   const [users, setUsers] = useState<User[]>([]);
   const [filtered, setFiltered] = useState<User[]>([]);
@@ -36,7 +38,7 @@ function Users() {
 
   // Ini supaya tiap page tidak selalu mulai dari 1 ...
   const offset = (currentPage - 1) * usersPerPage;
-  
+
   
   useEffect(() => {
     const controller = new AbortController();
@@ -49,7 +51,13 @@ function Users() {
         // 2. Gunakan URL yang benar untuk daftar pengguna (tanpa ID di belakang)
         const response = await axios.get<ApiResponse<User[]>>(
           "http://localhost:8000/api/user",
-          { signal: controller.signal }
+          {
+            signal: controller.signal,
+            headers: {
+              Authorization: `Bearer ${token}`, // Add this line to include the JWT
+            },
+            withCredentials: true,
+          }
         );
 
         // 3. Set state dengan array data yang benar
@@ -64,7 +72,7 @@ function Users() {
     };
     // 4. Panggil fungsi fetchUsers
     fetchUsers();
-  }, []);
+  }, [token]);
 
   // Filtered Data Users
   useEffect(() => {
@@ -231,7 +239,7 @@ function Users() {
                     <th>Jenis Kelamin</th>
                     <th>Telp</th>
                     <th>Email</th>
-                    <th>Status</th>
+                    <th>Role</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -249,7 +257,7 @@ function Users() {
                       <td>{user.email}</td>
                       <td>
                         <span className="badge bg-label-primary me-1">
-                          Active
+                          {user.role}
                         </span>
                       </td>
                       <td>

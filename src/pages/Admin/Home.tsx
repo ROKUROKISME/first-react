@@ -1,4 +1,5 @@
 import Cookies from "js-cookie"
+import { Helmet } from "react-helmet";
 
 
 const Home = () => {
@@ -6,6 +7,11 @@ const Home = () => {
   const token = Cookies.get("token"); 
   
   return (
+    <div>
+      <Helmet>
+        <title>Dashboard | Laravel for React</title>
+        <meta name="description" content="Selamat datang di website saya." />
+      </Helmet>
     <div className="container-xxl flex-grow-1 container-p-y">
       <div className="row">
         <div className="mb-4 col-lg-8 order-0">
@@ -655,6 +661,7 @@ const Home = () => {
         </div>
         {/*/ Transactions */}
       </div>
+    </div>
     </div>
   );
 }
